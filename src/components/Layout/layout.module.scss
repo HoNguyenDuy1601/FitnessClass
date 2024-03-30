@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+}
+
+.header {}
+
+.main-viewport {
+    flex: 1 1 82%;
+}
+
+.sidebar {
+    flex: 1 1 18%;
+}
+
+.children {
+    flex: 1 1 80%;
+}
