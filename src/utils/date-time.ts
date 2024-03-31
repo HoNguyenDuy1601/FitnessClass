@@ -20,3 +20,7 @@ export const timeRangeFormatter = (time: number | string): string => {
     }
     return days + ' day' + (days === 1 ? '' : 's') + ' ago';
 };
+
+export const dateConverter = (timestamp: number) => {
+    return moment(timestamp).format('YYYY-MM-DD');
+};

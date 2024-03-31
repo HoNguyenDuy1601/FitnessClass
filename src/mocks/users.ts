@@ -1,4 +1,5 @@
 import { UserManagementResponseDto } from '@/interfaces/Response/UserManagementResponseDto';
+import { UserProfileResponseDto } from '@/interfaces/Response/UserProfileResponseDto';
 
 export const users: UserManagementResponseDto[] = [
     {
@@ -62,3 +63,16 @@ export const users: UserManagementResponseDto[] = [
         email: 'example@gmail.com',
     },
 ];
+
+export const userProfile: UserProfileResponseDto = {
+    role: 'Admin',
+    firstName: 'First Name',
+    lastName: 'Last',
+    email: 'example@gmail.com',
+    phone: '0999 999 999',
+    dob: 1711816055359,
+    address: 'Ho Chi Minh city',
+    userName: 'username@admin',
+    password: 'password123',
+    status: 'Active',
+};

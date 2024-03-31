@@ -17,6 +17,24 @@
         outline: none;
         padding: 0 12px;
         font-weight: 500;
+        position: relative;
+    }
+
+    .input[type="date"] {
+        position: relative;
+        padding-left: 12%;
+
+        &::-webkit-calendar-picker-indicator {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50%;
+            height: 50%;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+        }
     }
 
     span.required {

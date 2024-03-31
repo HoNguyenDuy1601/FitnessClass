@@ -1,12 +1,14 @@
 import { UserAccountStatus } from '@/constants/users';
 
-export interface UserManagementResponseDto {
-    id: number;
+export interface UserProfileResponseDto {
+    role: string;
     firstName: string;
     lastName: string;
-    phone: string;
     email: string;
-    address: string;
+    phone: string;
     dob: string;
+    address: string;
+    userName: string;
+    password: string;
     status: UserAccountStatus;
 }
