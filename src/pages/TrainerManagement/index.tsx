@@ -1,75 +1,71 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
-import Status, { StatusType } from '@/components/Status';
-import TableAction from '@/components/TableAction';
+import TableActionForView from '@/components/TableActionForView';
 import TableDataList from '@/components/TableDataList';
-import {
-    TrainerManagementStatus,
-    UserManagementResponseDto,
-} from '@/interfaces/Response/UserManagementResponseDto';
-import { users } from '@/mocks/users';
+import { UserManagementResponseDto } from '@/interfaces/Response/UserManagementResponseDto';
 
-import styles from './staff-management.module.scss';
+import styles from './trainer-management.module.scss';
+import SearchBox from '@/components/SearchBox/SearchBox';
+import { useNavigate } from 'react-router-dom';
 
 const TrainerManagement = () => {
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const navigate = useNavigate();
+
     const cols = useMemo<ColumnDef<UserManagementResponseDto>[]>(
         () => [
-            { header: 'ID', accessorKey: 'id' },
-            { header: 'FirstName', accessorKey: 'firstName' },
-            { header: 'LastName', accessorKey: 'lastName' },
-            { header: 'Phone', accessorKey: 'phone' },
+            { header: 'Tên', accessorKey: 'firstName' },
+            { header: 'Họ', accessorKey: 'lastName' },
             { header: 'Email', accessorKey: 'email' },
-            { header: 'Address', accessorKey: 'address' },
-            { header: 'Date of Birth', accessorKey: 'dob' },
+            { header: 'Ngày sinh', accessorKey: 'dob',
+            cell: (value) => (
+                new Date(value.getValue() as Date).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"}) 
+            ),},
+            { header: 'Địa chỉ', accessorKey: 'address' },
+            { header: 'Số năm kinh nghiệm', accessorKey: 'yoe' },
             {
-                header: 'Status',
-                accessorKey: 'status',
-                cell: (value) => (
-                    <div className={styles.status}>
-                        <Status type={getStatusType(value.row.original.status)} text={value.getValue() as string} />
-                    </div>
-                ),
-            },
-            {
-                header: 'Action',
-                cell: () => (
-                    <TableAction
-                        onViewClick={handleViewClick}
-                        onEditClick={handleEditClick}
+                header: 'Thao tác',
+                cell: (x) => (
+                    <TableActionForView
+                        onViewClick={() => {                      
+                            navigate('/persondetail', {
+                                state: { 
+                                    "personId": x.cell.row.original.id,
+                                    "currentPage": "/trainer-management"
+                                    }
+                                } 
+                            );
+                            }}
                         onDeleteClick={handleDeleteClick}
                     />
                 ),
             },
         ],
-        [],
+        [searchTerm],
     );
-
-    const handleViewClick = () => {
-        console.log('View clicked');
-    };
-
-    const handleEditClick = () => {
-        console.log('Edit clicked');
-    };
 
     const handleDeleteClick = () => {
         console.log('Delete clicked');
     };
 
-    const getStatusType = (status: TrainerManagementStatus): StatusType => {
-        console.log(status);
-
-        return 'success';
-    };
+    const handleChangeSearchBox = (x : any) => {
+        console.log(x.target.value);
+        setSearchTerm(x.target.value);
+    }
 
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <span>Staff management</span>
+                <div className={styles.title}>
+                    <span>Huấn luyện viên</span>
+                </div>
+                <SearchBox 
+                onChange={(x) => handleChangeSearchBox(x)} 
+                value={searchTerm}/>
             </div>
             <div className={styles.table}>
-                <TableDataList cols={cols} path="/example" mockData={users} />
+                <TableDataList cols={cols} path={`/api/Auth/Trainers?query=${searchTerm}`} key={searchTerm} />
             </div>
         </div>
     );

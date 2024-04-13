@@ -1,8 +1,8 @@
 import LoginContainer from '@/components/Login';
 
-import styles from './login.module.scss';
+import styles from './sign-in.module.scss';
 
-const Login = () => {
+const SignIn = () => {
     return (
         <div className={styles.container}>
             <LoginContainer />
@@ -10,4 +10,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignIn;

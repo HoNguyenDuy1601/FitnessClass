@@ -1,22 +1,18 @@
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import DefaultAvatar from '~/images/default-avatar.png';
+import profile from '~/images/profile.png';
 
 import styles from './profile.module.scss';
+import Dropdown from '@/components/Dropdown';
+
+
 
 const Profile = () => {
     return (
         <div className={styles.container}>
-            <img src={DefaultAvatar} alt="Avatar" />
+            <img src={profile} alt="Avatar" />
             <div className={styles.info}>
                 <div className={styles.content}>
-                    <h3>Ho Duy</h3>
-                    <span>Admin</span>
+                    <Dropdown userName="Nguyen Nam" userRole="Admin" />
                 </div>
-            </div>
-            <div className={styles.down}>
-                <FontAwesomeIcon icon={faAngleDown} />
             </div>
         </div>
     );

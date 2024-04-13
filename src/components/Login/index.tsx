@@ -1,7 +1,26 @@
+import { LoginRequestDto } from '@/interfaces/Request/LoginRequestDto';
+import { BaseResponseDto } from '@/interfaces/Response/BaseResponseDto';
+import { addValue } from '@/utils/application';
+import { executePostWithBody } from '@/utils/http-client';
+
 import LoginForm from './Form';
 import styles from './login.module.scss';
 
 const LoginContainer = () => {
+    const handleLogin = async (request: LoginRequestDto) => {
+        try {
+            const { data }: { data: BaseResponseDto<string> } = await executePostWithBody('/login', request);
+            handleLoginSuccess(data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleLoginSuccess = (token: string) => {
+        addValue('token', token);
+        window.location.pathname = '/dashboard';
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.form}>
@@ -9,7 +28,7 @@ const LoginContainer = () => {
                     <h1 className={styles.title}>Login to Account</h1>
                     <p className={styles.desc}>Please enter you email and password to continue</p>
                 </div>
-                <LoginForm />
+                <LoginForm handleLogin={handleLogin} />
             </div>
         </div>
     );

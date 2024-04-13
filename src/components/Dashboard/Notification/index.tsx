@@ -25,7 +25,7 @@ const Notification = () => {
 const NotificationContent = () => {
     return (
         <div className={styles['noti-content']}>
-            <h3>Ho Duy</h3>
+            <h3>Tran Khang</h3>
             <p>The workouts are fun, the fellow members...</p>
             <span>{timeRangeFormatter(1711461393)}</span>
             <div className={styles.icon}>

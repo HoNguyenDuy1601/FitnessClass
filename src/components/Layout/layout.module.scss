@@ -2,8 +2,6 @@
     display: flex;
 }
 
-.header {}
-
 .main-viewport {
     flex: 1 1 82%;
 }
@@ -14,4 +12,7 @@
 
 .children {
     flex: 1 1 80%;
+    max-width: 80vw;
+    max-height: 88vh;
+    overflow: auto;
 }

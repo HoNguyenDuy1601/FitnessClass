@@ -1,5 +1,13 @@
+import { useEffect } from 'react';
+
+import { removeValue } from '@/utils/application';
+
 const Logout = () => {
-    return <div>Logout</div>;
+    useEffect(() => {
+        removeValue('token');
+        window.location.pathname = '/sign-in';
+    }, []);
+    return <></>;
 };
 
 export default Logout;

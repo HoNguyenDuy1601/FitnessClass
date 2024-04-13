@@ -18,4 +18,18 @@ export default defineConfig({
             },
         },
     },
+    server: {
+        proxy: {
+            '/login': {
+                target: 'https://e1cardiomanagementapis24.azurewebsites.net',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/login/, '/login'),
+            },
+            '/api': {
+                target: 'https://e1cardiomanagementapis24.azurewebsites.net',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, '/api'),
+            },
+        },
+    },
 });

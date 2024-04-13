@@ -1,7 +1,16 @@
+import clsx from 'clsx';
+import { FC } from 'react';
+
 import styles from './loading.module.scss';
 
-const Loader = () => {
-    return <div className={styles.loader}></div>;
+interface LoaderProps {
+    className?: string;
+}
+
+const Loader: FC<LoaderProps> = (props) => {
+    const { className } = props;
+
+    return <div className={clsx(styles.loader, className)}></div>;
 };
 
 export default Loader;

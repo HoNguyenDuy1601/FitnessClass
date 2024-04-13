@@ -6,7 +6,7 @@ export interface UserProfileResponseDto {
     lastName: string;
     email: string;
     phone: string;
-    dob: string;
+    dob: number;
     address: string;
     userName: string;
     password: string;

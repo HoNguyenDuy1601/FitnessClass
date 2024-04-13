@@ -10,3 +10,17 @@ export interface UserManagementResponseDto {
     dob: string;
     status: UserAccountStatus;
 }
+
+export interface CustomerManagementResponseDto {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+    dob: string;
+    height: number,
+    weight: number,
+    muscleRatio: number,
+    fatRatio: number,
+    visceralFatLevels: number
+}

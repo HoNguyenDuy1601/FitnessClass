@@ -1,5 +1,5 @@
 .container {
-    width: 22%;
+    width: 250px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 
@@ -10,7 +10,7 @@
         justify-content: center;
 
         .content {
-            height: 65%;
+            height: 85%;
             white-space: nowrap;
             display: flex;
             flex-direction: column;
@@ -28,7 +28,7 @@
     }
 
     img {
-        max-width: 65px;
+        height: 45px;
     }
 
     .down {

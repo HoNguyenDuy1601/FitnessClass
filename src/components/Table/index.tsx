@@ -9,14 +9,13 @@ import { useEffect } from 'react';
 import { PaginationRequest } from '@/interfaces/Request/PaginationRequestDto';
 
 import { Empty } from '../Icons';
-import Loading from '../Loading/Loader';
+import MiniLoading from '../Loading/MiniLoading';
 import styles from './table.module.scss';
 
 interface ReactTableProps<T extends object> {
     data: T[];
     columns: ColumnDef<T>[];
     pageSize: number;
-    pageCount: number;
     loading?: boolean;
     fetchData: (pagination: PaginationRequest) => void;
     onRowClick?: (data: T) => void;
@@ -24,12 +23,11 @@ interface ReactTableProps<T extends object> {
 }
 
 export const Table = <T extends object>(props: ReactTableProps<T>) => {
-    const { data = [], columns = [], pageSize, pageCount = 0, loading, fetchData, onRowClick, className } = props;
+    const { data = [], columns = [], pageSize, loading, fetchData, onRowClick, className } = props;
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
-        pageCount,
         manualPagination: true,
     });
 
@@ -37,7 +35,7 @@ export const Table = <T extends object>(props: ReactTableProps<T>) => {
         if (!fetchData) {
             return;
         }
-        fetchData({ page: table.getState().pagination.pageIndex + 1, pageSize });
+        fetchData({ pageIndex: table.getState().pagination.pageIndex + 1, pageSize });
     }, [table.getState().pagination.pageIndex, fetchData]);
 
     return (
@@ -60,7 +58,7 @@ export const Table = <T extends object>(props: ReactTableProps<T>) => {
                     <tbody>
                         {loading ? (
                             <RowCenter>
-                                <Loading />
+                                <MiniLoading />
                             </RowCenter>
                         ) : (
                             <>
@@ -93,7 +91,7 @@ export const Table = <T extends object>(props: ReactTableProps<T>) => {
                     </tbody>
                 </table>
             </div>
-            {pageCount > 1 && <Pagination table={table} />}
+            <Pagination table={table} />
         </>
     );
 };
@@ -113,23 +111,23 @@ const Pagination = <T extends RowData>(props: PaginationProps<T>) => {
         table.nextPage();
     };
 
+    const canNextPages = table.getRowModel().rows.length > 0;
+
     return (
         <div className={styles.pagination}>
             <button
                 className={clsx(styles.button, styles.previous, { [styles.disabled]: !table.getCanPreviousPage() })}
                 onClick={handlePreviousPage}
-                disabled={!table.getCanPreviousPage()}
             >
                 <FontAwesomeIcon icon={faAngleLeft} className={clsx({ 'opacity-60': !table.getCanPreviousPage() })} />
                 <span>Previous</span>
             </button>
             <button
-                className={clsx(styles.button, styles.next, { [styles.disabled]: !table.getCanNextPage() })}
+                className={clsx(styles.button, styles.next, { [styles.disabled]: !canNextPages })}
                 onClick={handleNextPage}
-                disabled={!table.getCanNextPage()}
             >
                 <span>Next</span>
-                <FontAwesomeIcon icon={faAngleRight} className={clsx({ 'opacity-60': !table.getCanNextPage() })} />
+                <FontAwesomeIcon icon={faAngleRight} className={clsx({ 'opacity-60': canNextPages })} />
             </button>
         </div>
     );

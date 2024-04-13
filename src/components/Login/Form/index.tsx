@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
@@ -7,7 +8,13 @@ import { LoginRequestDto } from '@/interfaces/Request/LoginRequestDto';
 
 import styles from './form.module.scss';
 
-const LoginForm = () => {
+interface LoginFormProps {
+    handleLogin: (request: LoginRequestDto) => void;
+}
+
+const LoginForm: FC<LoginFormProps> = (props) => {
+    const { handleLogin } = props;
+
     const {
         register,
         formState: { errors },
@@ -15,18 +22,18 @@ const LoginForm = () => {
     } = useForm<LoginRequestDto>();
 
     const onSubmit = (data: LoginRequestDto) => {
-        console.log(data);
+        handleLogin(data);
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <div>
+            <div className={styles.inputs}>
                 <Input
                     className={styles.input}
-                    label="UserName"
-                    placeholder="Username"
-                    {...register('userName', { required: 'Username is required' })}
-                    error={errors.userName}
+                    label="Phone"
+                    placeholder="Phone"
+                    {...register('phone', { required: 'Username is required' })}
+                    error={errors.phone}
                 />
                 <Input
                     className={styles.input}

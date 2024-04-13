@@ -1,1 +1,1 @@
-export const PageWithoutLayout = ['/login'];
+export const PageWithoutLayout = ['/sign-in'];

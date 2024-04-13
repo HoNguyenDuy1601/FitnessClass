@@ -11,10 +11,11 @@ interface IInputProps extends HTMLProps<HTMLInputElement> {
     error?: FieldError;
     required?: boolean;
     handleChange?: (name: string, value: unknown) => void;
+    fixedplaceholder?: string;
 }
 
 const Input = (props: IInputProps, ref: ForwardedRef<HTMLInputElement>) => {
-    const { className, label, type, required, error, name, handleChange } = props;
+    const { className, label, type, required, error, name, handleChange, fixedplaceholder } = props;
 
     const id = useId();
 
@@ -28,17 +29,22 @@ const Input = (props: IInputProps, ref: ForwardedRef<HTMLInputElement>) => {
                 {label}
                 {required && <span className={styles.required}>*</span>}
             </label>
-            <input
-                ref={ref}
-                {...props}
-                id={id}
-                className={clsx(styles.input, {
-                    [styles.required]: error?.type === 'required',
-                    [styles.disabled]: props.disabled,
-                })}
-                type={type}
-                onChange={(e) => handleChange && name && handleChange(name, e.target.value)}
-            />
+            <div className={styles.input}>
+                <input
+                    ref={ref}
+                    {...props}
+                    id={id}
+                    className={clsx({
+                        [styles.required]: error?.type === 'required',
+                        [styles.disabled]: props.disabled,
+                    })}
+                    type={type}
+                    onChange={(e) =>
+                        handleChange && (name ? handleChange(name, e.target.value) : handleChange('', e.target.value))
+                    }
+                />
+                {fixedplaceholder && <span className={styles['fixed-placeholder']}>{fixedplaceholder}</span>}
+            </div>
             {hasError() && <span className={styles.error}>{error?.message}</span>}
         </div>
     );

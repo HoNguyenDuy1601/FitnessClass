@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import { getValue, removeValue } from '@/utils/application';
 
 export const API = axios.create({
-    baseURL: `http://api-url`,
+    baseURL: '',
 });
 
 API.interceptors.response.use(
@@ -14,6 +14,8 @@ API.interceptors.response.use(
     },
     (error) => {
         console.log(`*********** AxiosError ***********`, error);
+
+        console.log(import.meta.env);
 
         if (!error.response) {
             return Promise.reject(error);
@@ -40,12 +42,8 @@ API.interceptors.response.use(
 
 API.interceptors.request.use(
     (config) => {
-        let hardToken = false;
-        if (config.headers && config.headers['hard-token']) {
-            hardToken = true;
-        }
         const token = getValue('token');
-        config.headers.Authorization = hardToken ? `token||${process.env.NEXT_PUBLIC_HARD_TOKEN}` : `token||${token}`;
+        config.headers.Authorization = `Bearer ${token}`;
         config.headers = {
             mode: 'no-cors',
             ...config.headers,
@@ -57,5 +55,3 @@ API.interceptors.request.use(
         console.warn(`*********** error: interceptors.request ***********`, error);
     },
 );
-
-API.defaults.headers.common['Authorization'] = 'hello';

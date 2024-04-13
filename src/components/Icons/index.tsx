@@ -1,4 +1,6 @@
 import CustomerIcon from '~/images/customer.png';
+import OrdersIcon from '~/images/orders.png';
+import PackageIcon from '~/images/package.png';
 import ProfileIcon from '~/images/profile.png';
 import StaffIcon from '~/images/staff.png';
 import TrainerIcon from '~/images/trainer.png';
@@ -169,11 +171,15 @@ export const TrainingProgram = () => {
 };
 
 export const Customer = () => {
-    return <img src={CustomerIcon} width="30" height="28" alt="" />;
+    return <img src={CustomerIcon} alt="" />;
 };
 
 export const Trainer = () => {
-    return <img src={TrainerIcon} width="25" height="23" alt="" />;
+    return <img src={TrainerIcon} alt="" />;
+};
+
+export const Package = () => {
+    return <img src={PackageIcon} alt="" />;
 };
 
 export const Staff = () => {
@@ -204,4 +210,8 @@ export const Logout = () => {
             />
         </svg>
     );
+};
+
+export const Orders = () => {
+    return <img src={OrdersIcon} alt="" />;
 };

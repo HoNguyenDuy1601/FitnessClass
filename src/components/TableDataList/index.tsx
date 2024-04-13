@@ -3,10 +3,9 @@ import { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { PaginationRequest } from '@/interfaces/Request/PaginationRequestDto';
-import { PaginationResponse } from '@/interfaces/Response/PaginationResponseDto';
+import { BaseResponseDto } from '@/interfaces/Response/BaseResponseDto';
 import { executeGetWithPagination } from '@/utils/http-client';
 
-import LoadingOverlay from '../Loading/LoadingOverlay';
 import { Table } from '../Table';
 
 interface TableDataListProps<T> {
@@ -14,39 +13,34 @@ interface TableDataListProps<T> {
     path: string;
     pageSize?: number;
     mockData?: T[];
+    isRefresh?: boolean;
 }
 
 const TableDataList = <T extends object>(props: TableDataListProps<T>) => {
-    const { cols, path, pageSize = 10, mockData } = props;
+    const { cols, path, pageSize = 10, mockData, isRefresh} = props;
 
     const [isLoading, setIsLoading] = useState(false);
-    const [totalPage, setTotalPage] = useState(20);
     const [dataRendering, setDataRendering] = useState<T[]>([]);
 
     const fetchData = useCallback(async (pagination: PaginationRequest) => {
         setDataRendering(mockData ?? []);
 
         try {
-            // setIsLoading(true);
-            const { data }: { data: PaginationResponse<T> } = await executeGetWithPagination(path, {
-                page: pagination.page,
-                pageSize,
+            setIsLoading(true);
+            const { data }: { data: BaseResponseDto<T[]> } = await executeGetWithPagination(path, {
+                pageIndex: pagination.pageIndex,
+                pageSize
             });
-            setDataRendering(data.rows);
-            setTotalPage(data.totalPage);
+            setDataRendering(data.data);
         } catch (error) {
             toast.error((error as Error).message);
         } finally {
             setIsLoading(false);
         }
-    }, []);
-
-    if (isLoading) {
-        return <LoadingOverlay />;
-    }
+    }, [isRefresh]);
 
     return (
-        <Table<T> data={dataRendering} columns={cols} pageSize={pageSize} pageCount={totalPage} fetchData={fetchData} />
+        <Table<T> data={dataRendering} columns={cols} pageSize={pageSize} fetchData={fetchData} loading={isLoading} />
     );
 };
 

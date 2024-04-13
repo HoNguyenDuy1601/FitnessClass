@@ -1,42 +1,67 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
-import Status, { StatusType } from '@/components/Status';
-import TableAction from '@/components/TableAction';
+import TableActionForView from '@/components/TableActionForView';
 import TableDataList from '@/components/TableDataList';
-import {
-    TrainerManagementStatus,
-    UserManagementResponseDto,
-} from '@/interfaces/Response/UserManagementResponseDto';
-import { users } from '@/mocks/users';
-
+import { CustomerManagementResponseDto } from '@/interfaces/Response/UserManagementResponseDto';
+import 'font-awesome/css/font-awesome.min.css';
+import 'reactjs-popup/dist/index.css';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import styles from './customer-management.module.scss';
+import SearchBox from '@/components/SearchBox/SearchBox';
+import { useNavigate } from 'react-router-dom';
+
 
 const CustomerManagement = () => {
-    const cols = useMemo<ColumnDef<UserManagementResponseDto>[]>(
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const options = {
+        title: 'Xác nhận',
+        message: 'Bạn có muốn xóa khách hàng?',
+        buttons: [
+          {
+            label: 'Yes',
+            onClick: () => {}
+          },
+          {
+            label: 'No',
+            onClick: () => {}
+          }
+        ],
+        closeOnEscape: true,
+        closeOnClickOutside: true,
+        keyCodeForClose: [8, 32],
+        overlayClassName: "overlay-custom-class-name"
+      };
+    const navigate = useNavigate();
+
+    const cols = useMemo<ColumnDef<CustomerManagementResponseDto>[]>(
         () => [
-            { header: 'ID', accessorKey: 'id' },
-            { header: 'FirstName', accessorKey: 'firstName' },
-            { header: 'LastName', accessorKey: 'lastName' },
-            { header: 'Phone', accessorKey: 'phone' },
+            { header: 'Tên', accessorKey: 'firstName' },
+            { header: 'Họ', accessorKey: 'lastName' },
+            { header: 'Số điện thoại', accessorKey: 'phone' },
             { header: 'Email', accessorKey: 'email' },
-            { header: 'Address', accessorKey: 'address' },
-            { header: 'Date of Birth', accessorKey: 'dob' },
-            {
-                header: 'Status',
-                accessorKey: 'status',
+            { header: 'Địa chỉ', accessorKey: 'address' },
+            { header: 'Ngày sinh', accessorKey: 'dob',
                 cell: (value) => (
-                    <div className={styles.status}>
-                        <Status type={getStatusType(value.row.original.status)} text={value.getValue() as string} />
-                    </div>
-                ),
+                    new Date(value.getValue() as Date).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"}) 
+            ),
             },
+                        { header: 'Chiều cao', accessorKey: 'height' },
+            { header: 'Cân nặng', accessorKey: 'weight' },
             {
-                header: 'Action',
-                cell: () => (
-                    <TableAction
-                        onViewClick={handleViewClick}
-                        onEditClick={handleEditClick}
+                header: 'Thao tác',
+                cell: (x) => (
+                    <TableActionForView
+                        onViewClick={() => {                      
+                        navigate('/persondetail', {
+                            state: { 
+                                "personId": x.cell.row.original.id,
+                                "currentPage": "/customer-management"
+                                }
+                            } 
+                        );
+                        }}
                         onDeleteClick={handleDeleteClick}
                     />
                 ),
@@ -45,31 +70,27 @@ const CustomerManagement = () => {
         [],
     );
 
-    const handleViewClick = () => {
-        console.log('View clicked');
-    };
-
-    const handleEditClick = () => {
-        console.log('Edit clicked');
-    };
-
     const handleDeleteClick = () => {
-        console.log('Delete clicked');
+        confirmAlert(options);
     };
 
-    const getStatusType = (status: TrainerManagementStatus): StatusType => {
-        console.log(status);
-
-        return 'success';
-    };
+    const handleChangeSearchBox = (x : any) => {
+        console.log(x.target.value);
+        setSearchTerm(x.target.value);
+    }
 
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <span>Customer management</span>
+                <div className={styles.title}>
+                    <span>Khách hàng</span>
+                </div>
+                <SearchBox 
+                onChange={(x) => handleChangeSearchBox(x)} 
+                value={searchTerm}/>
             </div>
             <div className={styles.table}>
-                <TableDataList cols={cols} path="/example" mockData={users} />
+                <TableDataList cols={cols} path={`/api/Auth/customers?query=${searchTerm}`} key={searchTerm} />
             </div>
         </div>
     );
