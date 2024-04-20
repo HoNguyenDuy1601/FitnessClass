@@ -1,5 +1,6 @@
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
 import { useAsync, useToggle } from 'react-use';
 
 import { API } from '@/configs/axios';
@@ -9,23 +10,29 @@ import profile from '~/images/profile.png';
 
 import Dropdown from '../Dropdown';
 import styles from './profile.module.scss';
-import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const [isShowDropDown, toggleShowDropdown] = useToggle(false);
 
-    const { value } = useAsync(async () => API.get('/info'));
-    const { data: userInfo } = value?.data as BaseResponseDto<LoginResponseDto>;
+    const { value, loading } = useAsync(async () => API.get('/info'));
+
     const navigate = useNavigate();
 
     const handleClickInfo = () => {
-        navigate("/loginuserdetail");
+        navigate('/loginuserdetail');
         toggleShowDropdown();
     };
     const handleClickLogout = () => {
-        navigate("/logout");
+        navigate('/logout');
         toggleShowDropdown();
     };
+
+    if (loading) {
+        return <></>;
+    }
+
+    const { data: userInfo } = value?.data as BaseResponseDto<LoginResponseDto>;
+
     return (
         <div className={styles.container}>
             <img src={profile} alt="Avatar" />
@@ -38,7 +45,7 @@ const Profile = () => {
             <button className={styles.down} onClick={toggleShowDropdown}>
                 <FontAwesomeIcon icon={faAngleDown} />
             </button>
-            <Dropdown isShow={isShowDropDown} clickInfo={handleClickInfo} clickLogout={handleClickLogout}/>
+            <Dropdown isShow={isShowDropDown} clickInfo={handleClickInfo} clickLogout={handleClickLogout} />
         </div>
     );
 };

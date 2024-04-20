@@ -12,10 +12,10 @@ import Textarea from '@/components/Textarea';
 import { UpdatePackageRequestDto } from '@/interfaces/Request/CreatePackageRequestDto';
 import { BaseResponseDto } from '@/interfaces/Response/BaseResponseDto';
 import { BranchResponseDto } from '@/interfaces/Response/BranchResponseDto';
-import { executeGetWithPagination, executePostWithBody, executePutWithBody } from '@/utils/http-client';
+import { executeGetWithPagination, executePutWithBody } from '@/utils/http-client';
 
-import styles from './detail.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
+import styles from './detail.module.scss';
 
 const DetailPackage = () => {
     const location = useLocation();

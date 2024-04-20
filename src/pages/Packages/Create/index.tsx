@@ -14,8 +14,8 @@ import { BaseResponseDto } from '@/interfaces/Response/BaseResponseDto';
 import { BranchResponseDto } from '@/interfaces/Response/BranchResponseDto';
 import { executeGetWithPagination, executePostWithBody } from '@/utils/http-client';
 
-import styles from './create.module.scss';
 import { useNavigate } from 'react-router-dom';
+import styles from './create.module.scss';
 
 const CreatePackage = () => {
     const [requestDto, setRequestDto] = useState<CreatePackageRequestDto>(defaultRequest);
