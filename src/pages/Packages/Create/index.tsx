@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
 import Button from '@/components/Button';
@@ -15,7 +16,6 @@ import { BranchResponseDto } from '@/interfaces/Response/BranchResponseDto';
 import { executeGetWithPagination, executePostWithBody } from '@/utils/http-client';
 
 import styles from './create.module.scss';
-import { useNavigate } from 'react-router-dom';
 
 const CreatePackage = () => {
     const [requestDto, setRequestDto] = useState<CreatePackageRequestDto>(defaultRequest);
@@ -75,10 +75,12 @@ const CreatePackage = () => {
                                 handleChange={(_, value) => handleInputChange('packageName', String(value))}
                             />
                             <Select
-                                    className={styles.input}
-                                    label="Cơ sở"
-                                    options={options}
-                                    onChange={(value) => handleInputChange('branchId', Number(value))} defaultValue={0}                            />
+                                className={styles.input}
+                                label="Cơ sở"
+                                options={options}
+                                onChange={(value) => handleInputChange('branchId', Number(value))}
+                                defaultValue={0}
+                            />
                             <Textarea
                                 label="Mô tả"
                                 className={styles.input}
@@ -116,7 +118,11 @@ const CreatePackage = () => {
                     </div>
                     <div className={styles.buttons}>
                         <div className={styles.group}>
-                            <Button content={<span>Hủy</span>} className={clsx(styles.button, styles.cancel)} onClick={handleCancelClick}/>
+                            <Button
+                                content={<span>Hủy</span>}
+                                className={clsx(styles.button, styles.cancel)}
+                                onClick={handleCancelClick}
+                            />
                             <Button
                                 content={<span>Tạo gói tập</span>}
                                 className={styles.button}

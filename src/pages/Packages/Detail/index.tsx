@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
 import Button from '@/components/Button';
@@ -12,27 +13,23 @@ import Textarea from '@/components/Textarea';
 import { UpdatePackageRequestDto } from '@/interfaces/Request/CreatePackageRequestDto';
 import { BaseResponseDto } from '@/interfaces/Response/BaseResponseDto';
 import { BranchResponseDto } from '@/interfaces/Response/BranchResponseDto';
-import { executeGetWithPagination, executePostWithBody, executePutWithBody } from '@/utils/http-client';
+import { executeGetWithPagination, executePutWithBody } from '@/utils/http-client';
 
 import styles from './detail.module.scss';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 const DetailPackage = () => {
     const location = useLocation();
-    let data = location.state;
-    const [requestDto, setRequestDto] = useState<UpdatePackageRequestDto>(
-        {
-            branchId: data.branchId,
-            descriptions: data.descriptions,
-            numberOfDays: data.numberOfDays,
-            numberOfSessions: data.numberOfSessions,
-            packageName: data.packageName,
-            packagePrice: data.packagePrice,
-            type: data.type
-        }
-    );
+    const data = location.state;
+    const [requestDto, setRequestDto] = useState<UpdatePackageRequestDto>({
+        branchId: data.branchId,
+        descriptions: data.descriptions,
+        numberOfDays: data.numberOfDays,
+        numberOfSessions: data.numberOfSessions,
+        packageName: data.packageName,
+        packagePrice: data.packagePrice,
+        type: data.type,
+    });
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
 
     const { loading, value } = useAsync(async () => {
         try {
@@ -137,7 +134,11 @@ const DetailPackage = () => {
                     </div>
                     <div className={styles.buttons}>
                         <div className={styles.group}>
-                            <Button content={<span>Hủy</span>} className={clsx(styles.button, styles.cancel)} onClick={handleCancelClick}/>
+                            <Button
+                                content={<span>Hủy</span>}
+                                className={clsx(styles.button, styles.cancel)}
+                                onClick={handleCancelClick}
+                            />
                             <Button
                                 content={<span>Cập nhật gói tập</span>}
                                 className={styles.button}

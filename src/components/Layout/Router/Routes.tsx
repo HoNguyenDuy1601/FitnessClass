@@ -12,9 +12,9 @@ import {
     Trainer,
 } from '@/components/Icons';
 import { AppRouter, RouterGroup } from '@/constants/routes';
+import CurrentLoginUserInfo from '@/pages/CurrentLoginUser';
 import DetailPackage from '@/pages/Packages/Detail';
 import DetailPersonInfo from '@/pages/PersonInformation';
-import CurrentLoginUserInfo from '@/pages/CurrentLoginUser';
 
 const Error = lazy(() => import('@/pages/Error'));
 const Home = lazy(() => import('@/pages/index'));
