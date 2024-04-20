@@ -33,6 +33,7 @@ const Profile = lazy(() => import('@/pages/Profile'));
 const Settings = lazy(() => import('@/pages/Settings'));
 const Logout = lazy(() => import('@/pages/Logout'));
 const Orders = lazy(() => import('@/pages/Orders'));
+const CreateSellPackage = lazy(() => import('@/pages/SellPackage/Create'));
 
 export const routes: AppRouter[] = [
     { path: '/', element: <Home />, errorElement: <Error />, hidden: true, group: RouterGroup.management },
@@ -54,6 +55,12 @@ export const routes: AppRouter[] = [
     {
         path: '/package-create',
         element: <CreatePackage />,
+        group: RouterGroup.management,
+        hidden: true,
+    },
+    {
+        path: '/sell-package/create',
+        element: <CreateSellPackage />,
         group: RouterGroup.management,
         hidden: true,
     },

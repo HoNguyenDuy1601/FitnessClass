@@ -1,62 +1,63 @@
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 import { ColumnDef } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button';
 import { TrainingPrograms } from '@/components/Icons';
 import PackageType from '@/components/PackageType';
+import SearchBox from '@/components/SearchBox/SearchBox';
+import TableAction from '@/components/TableAction';
 import TableDataList from '@/components/TableDataList';
 import { EPackageType } from '@/constants/packages';
 import { DemoPackageResponseDto } from '@/interfaces/Response/DemoPackageResponseDto';
+import { formatNumber } from '@/utils/common';
+import { executeDeleteWithBody } from '@/utils/http-client';
 
 import styles from './packages.module.scss';
-import TableAction from '@/components/TableAction';
-import { formatNumber } from '@/utils/common';
-import SearchBox from '@/components/SearchBox/SearchBox';
-import { executeDeleteWithBody } from '@/utils/http-client';
-import toast from 'react-hot-toast';
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const Packages = () => {
     let packageId = 0;
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [searchTerm, setSearchTerm] = useState<string>('');
     const [refreshTable, setRefreshTable] = useState(false);
     const options = {
         title: 'XÁC NHẬN',
         message: 'Bạn có muốn xóa gói tập?',
         buttons: [
-          {
-            label: 'Yes',
-            onClick: async () => {
-                try {
-                    await executeDeleteWithBody(`/api/DemoPackage/${packageId}`);
-                    toast.success('Delete package successfully');
-                    setRefreshTable(!refreshTable);
-                } catch (error) {
-                    toast.error('Delete Package Error!');
-                } finally {
-                    setSearchTerm("");
-                    // setIsLoading(false);
-                }
-            }
-          },
-          {
-            label: 'No',
-            onClick: () => {}
-          }
+            {
+                label: 'Yes',
+                onClick: async () => {
+                    try {
+                        await executeDeleteWithBody(`/api/DemoPackage/${packageId}`);
+                        toast.success('Delete package successfully');
+                        setRefreshTable(!refreshTable);
+                    } catch (error) {
+                        toast.error('Delete Package Error!');
+                    } finally {
+                        setSearchTerm('');
+                        // setIsLoading(false);
+                    }
+                },
+            },
+            {
+                label: 'No',
+                onClick: () => {},
+            },
         ],
         closeOnEscape: true,
         closeOnClickOutside: true,
         keyCodeForClose: [8, 32],
-        overlayClassName: "overlay-custom-class-name"
-      };
+        overlayClassName: 'overlay-custom-class-name',
+    };
 
     const handleDeleteClick = (id: number) => {
         packageId = id;
         confirmAlert(options);
     };
-    
+
     const cols = useMemo<ColumnDef<DemoPackageResponseDto>[]>(
         () => [
             { header: 'Tiêu đề', accessorKey: 'packageName' },
@@ -66,10 +67,8 @@ const Packages = () => {
             {
                 header: 'Giá',
                 accessorKey: 'packagePrice',
-                
-                cell: (value) => (
-                    formatNumber(value.getValue() as number)
-                )
+
+                cell: (value) => formatNumber(value.getValue() as number),
             },
             {
                 header: 'Loại',
@@ -83,26 +82,24 @@ const Packages = () => {
                 header: 'Thao tác',
                 cell: (x) => (
                     <TableAction
-                        onEditClick={()=>
-                                {
-                                navigate('/package-detail', {
-                                    state: { 
-                                        "id": x.cell.row.original.id,
-                                        "packageName": x.cell.row.original.packageName,
-                                        "descriptions": x.cell.row.original.descriptions,
-                                        "numberOfDays": x.cell.row.original.numberOfDays,
-                                        "numberOfSessions": x.cell.row.original.numberOfSessions,
-                                        "packagePrice": x.cell.row.original.packagePrice,
-                                        "type": x.cell.row.original.type,
-                                        "branchId": x.cell.row.original.branch.id,
-                                        }
-                                      } 
-                                  );
-                                }
-                        }
+                        onEditClick={() => {
+                            navigate('/package-detail', {
+                                state: {
+                                    id: x.cell.row.original.id,
+                                    packageName: x.cell.row.original.packageName,
+                                    descriptions: x.cell.row.original.descriptions,
+                                    numberOfDays: x.cell.row.original.numberOfDays,
+                                    numberOfSessions: x.cell.row.original.numberOfSessions,
+                                    packagePrice: x.cell.row.original.packagePrice,
+                                    type: x.cell.row.original.type,
+                                    branchId: x.cell.row.original.branch.id,
+                                },
+                            });
+                        }}
                         onDeleteClick={() => handleDeleteClick(x.cell.row.original.id)}
+                        onViewClick={() => handleCreateSellPackage(x.row.original.id)}
                     />
-                ),  
+                ),
             },
         ],
         [searchTerm, refreshTable],
@@ -113,10 +110,14 @@ const Packages = () => {
         navigate('/package-create');
     };
 
-    const handleChangeSearchBox = (x : any) => {
+    const handleChangeSearchBox = (x: any) => {
         console.log(x.target.value);
         setSearchTerm(x.target.value);
-    }
+    };
+
+    const handleCreateSellPackage = (id: number) => {
+        navigate(`/sell-package/create?id=${id}`);
+    };
 
     return (
         <div className={styles.container}>
@@ -125,9 +126,7 @@ const Packages = () => {
                     <TrainingPrograms />
                     <span>Gói tập </span>
                 </div>
-                <SearchBox 
-                onChange={(x) => handleChangeSearchBox(x)} 
-                value={searchTerm}/>
+                <SearchBox onChange={(x) => handleChangeSearchBox(x)} value={searchTerm} />
                 <div>
                     <Button
                         content={<span>Tạo gói tập</span>}
@@ -137,7 +136,12 @@ const Packages = () => {
                 </div>
             </div>
             <div className={styles.table}>
-                <TableDataList cols={cols} path={`/api/DemoPackage?query=${searchTerm}`} key={searchTerm} isRefresh={refreshTable}/>
+                <TableDataList
+                    cols={cols}
+                    path={`/api/DemoPackage?query=${searchTerm}`}
+                    key={searchTerm}
+                    isRefresh={refreshTable}
+                />
             </div>
         </div>
     );

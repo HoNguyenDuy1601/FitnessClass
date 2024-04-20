@@ -1,21 +1,20 @@
 import clsx from 'clsx';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
 import Button from '@/components/Button';
 import { TrainingPrograms } from '@/components/Icons';
+import Input from '@/components/Input';
 import Loader from '@/components/Loading/Loader';
 import { BaseResponseDto } from '@/interfaces/Response/BaseResponseDto';
+import { PersonInformation } from '@/interfaces/Response/PersonInforDto';
 import { executeGetWithPagination } from '@/utils/http-client';
 
 import styles from './personInfo.module.scss';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { PersonInformation } from '@/interfaces/Response/PersonInforDto';
-import Input from '@/components/Input';
 
 const DetailPersonInfo = () => {
     const location = useLocation();
-    let dataFromMotherScreen = location.state;
-
+    const dataFromMotherScreen = location.state;
 
     const { loading, value } = useAsync(async () => {
         try {
@@ -52,28 +51,32 @@ const DetailPersonInfo = () => {
                                 handleChange={() => {}}
                                 value={value?.firstName}
                                 disabled
-                            /> 
+                            />
                             <Input
                                 label="Họ"
                                 className={styles.input}
                                 handleChange={() => {}}
                                 value={value?.lastName}
                                 disabled
-                            /> 
+                            />
                             <Input
                                 label="Số điện thoại"
                                 className={styles.input}
                                 handleChange={() => {}}
                                 value={value?.phone}
                                 disabled
-                            /> 
+                            />
                             <Input
                                 label="Ngày sinh"
                                 className={styles.input}
                                 handleChange={() => {}}
-                                value={new Date(value?.dob as Date).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"})}
+                                value={new Date(value?.dob as Date).toLocaleDateString('en-us', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                })}
                                 disabled
-                            /> 
+                            />
                         </div>
                         <div className={styles['group-2']}>
                             <Input
@@ -82,27 +85,31 @@ const DetailPersonInfo = () => {
                                 handleChange={() => {}}
                                 value={value?.email}
                                 disabled
-                            /> 
+                            />
                             <Input
                                 label="Địa chỉ"
                                 className={styles.input}
                                 handleChange={() => {}}
                                 value={value?.address}
                                 disabled
-                            /> 
+                            />
                             <Input
                                 label="Vị trí"
                                 className={styles.input}
                                 handleChange={() => {}}
                                 value={value?.position}
                                 disabled
-                            /> 
+                            />
                         </div>
                     </div>
                     <div className={styles.buttons}>
                         <div className={styles.group}>
-                            <div/>
-                            <Button content={<span>Trở về</span>} className={clsx(styles.button, styles.cancel)} onClick={handleCancelClick}/>
+                            <div />
+                            <Button
+                                content={<span>Trở về</span>}
+                                className={clsx(styles.button, styles.cancel)}
+                                onClick={handleCancelClick}
+                            />
                         </div>
                     </div>
                 </div>
