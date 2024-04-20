@@ -64,18 +64,77 @@
     margin-top: 2em;
 
     .group {
-        width: 40%;
+        width: 100%;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
 
         .button {
-            flex-basis: 45%;
+            flex-basis: 25%;
             border-radius: $radius-md * 5;
         }
+    }
+}
 
-        .cancel {
-            background: white;
-            color: black;
+.schedules {
+
+    .box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .button {
+        width: 35px;
+        min-height: 35px;
+        padding: 0;
+        display: flex;
+    }
+
+    .inputs {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 12px;
+    }
+
+    .label {
+        font-weight: 600;
+        opacity: .8;
+        margin-bottom: 12px;
+        display: block;
+        font-size: 18px;
+    }
+
+    .schedules-added {
+        margin-top: $margin-sm * 1.5;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 8px;
+        row-gap: 8px;
+    }
+
+    .schedule {
+        background: #afafaf;
+        padding: $padding-sm;
+        border-radius: $radius-sm;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .value {
+            display: flex;
+            justify-content: space-between;
+            width: 85%;
+        }
+
+        .remove {
+            background: none;
+            border: none;
+            outline: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
         }
     }
 }

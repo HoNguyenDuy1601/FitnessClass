@@ -13,7 +13,7 @@ interface SelectProps {
     className?: string;
     options: Option[];
     onChange?: (value: string | number) => void;
-    defaultValue: number;
+    defaultValue?: number;
 }
 
 const Select: FC<SelectProps> = (props) => {
@@ -28,7 +28,7 @@ const Select: FC<SelectProps> = (props) => {
             <select id={id} onChange={(e) => onChange && onChange(e.target.value)} defaultValue={defaultValue}>
                 <option selected disabled></option>
                 {options.map(({ label, value }, index) => (
-                    <option key={index} value={value} >
+                    <option key={index} value={value}>
                         {label}
                     </option>
                 ))}
