@@ -1,28 +1,57 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import { LoginFormValidateMessage } from '@/interfaces/LoginFormValidate';
 import { LoginRequestDto } from '@/interfaces/Request/LoginRequestDto';
 
 import styles from './form.module.scss';
 
 interface LoginFormProps {
     handleLogin: (request: LoginRequestDto) => void;
+    loading: boolean;
 }
 
+const defaultRequest = { phone: '', password: '' };
+
 const LoginForm: FC<LoginFormProps> = (props) => {
-    const { handleLogin } = props;
+    const { handleLogin, loading } = props;
 
-    const {
-        register,
-        formState: { errors },
-        handleSubmit,
-    } = useForm<LoginRequestDto>();
+    const [data, setData] = useState<LoginRequestDto>(defaultRequest);
+    const [errors, setErrors] = useState<Record<keyof LoginRequestDto, LoginFormValidateMessage | null>>({
+        phone: null,
+        password: null,
+    });
 
-    const onSubmit = (data: LoginRequestDto) => {
+    const { handleSubmit } = useForm<LoginRequestDto>();
+
+    const handleError = (fields: (keyof LoginRequestDto)[]) => {
+        fields.forEach((field) => {
+            const errorMessage = field === 'phone' ? 'Username' : 'Password';
+            setErrors((prev) => ({ ...prev, [field]: { type: 'required', message: `${errorMessage} is required!` } }));
+        });
+    };
+
+    const onSubmit = () => {
+        if (data.phone.isEmpty() && data.password.isEmpty()) {
+            handleError(['phone', 'password']);
+        }
+        if (data.phone.isEmpty()) {
+            handleError(['phone']);
+            return;
+        }
+        if (data.password.isEmpty()) {
+            handleError(['password']);
+            return;
+        }
         handleLogin(data);
+    };
+
+    const handleInputChange = (name: keyof LoginRequestDto, value: string) => {
+        setErrors((prev) => ({ ...prev, [name]: null }));
+        setData((prev) => ({ ...prev, [name]: value }));
     };
 
     return (
@@ -30,22 +59,22 @@ const LoginForm: FC<LoginFormProps> = (props) => {
             <div className={styles.inputs}>
                 <Input
                     className={styles.input}
-                    label="Phone"
-                    placeholder="Phone"
-                    {...register('phone', { required: 'Username is required' })}
-                    error={errors.phone}
+                    label="UserName"
+                    placeholder="Username"
+                    handleChange={(_, value) => handleInputChange('phone', String(value))}
+                    error={errors?.phone}
                 />
                 <Input
                     className={styles.input}
                     type="password"
                     label="Password"
                     placeholder="Password"
-                    {...register('password', { required: 'Password is required' })}
-                    error={errors.password}
+                    handleChange={(_, value) => handleInputChange('password', String(value))}
+                    error={errors?.password}
                 />
             </div>
             <div className={styles.submit}>
-                <Button content="Sign in" className={styles.button} type="submit" />
+                <Button content="Sign in" className={styles.button} type="submit" loading={loading} />
                 <div className={styles.register}>
                     <span className={styles.text}>{`Don't have an account?`}</span>
                     <Link to={''} className={styles.link}>

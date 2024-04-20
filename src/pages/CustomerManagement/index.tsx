@@ -40,7 +40,6 @@ const CustomerManagement = () => {
             { header: 'Tên', accessorKey: 'firstName' },
             { header: 'Họ', accessorKey: 'lastName' },
             { header: 'Số điện thoại', accessorKey: 'phone' },
-            { header: 'Email', accessorKey: 'email' },
             { header: 'Địa chỉ', accessorKey: 'address' },
             { header: 'Ngày sinh', accessorKey: 'dob',
                 cell: (value) => (

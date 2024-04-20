@@ -1,7 +1,9 @@
 .container {
-    width: 250px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    width: 220px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 
     .info {
         height: 100%;
@@ -34,6 +36,9 @@
     .down {
         @include flex-center;
         flex-direction: column;
+        cursor: pointer;
+        border: none;
+        background: none;
 
         svg {
             border: 1px solid $gray;

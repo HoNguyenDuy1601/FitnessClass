@@ -12,18 +12,19 @@
   border-radius: $radius * 4;
 
   .title {
-      @include flex-center;
+    @include flex-center;
 
-      span {
-          font-weight: 600;
-          font-size: 2em;
-      }
+    span {
+        font-weight: 600;
+        font-size: 2em;
+    }
   }
+}
 
-  .button {
-      width: 150px;
-      border-radius: 32px
-  }
+.button {
+    width: 150px;
+    border-radius: 32px
+
 }
 
 .table {

@@ -1,3 +1,5 @@
+import '@/utils/string';
+
 import { Provider } from 'react-redux';
 
 import AppRouter from '@/components/Layout/Router';

@@ -7,12 +7,22 @@
     background: white;
     display: flex;
     align-items: center;
-    padding: $padding * 4;
+    justify-content: space-between;
+    padding: $padding * 6;
     border-radius: $radius * 4;
 
-    span {
-        font-weight: 600;
-        font-size: 2em;
+    .title {
+        @include flex-center;
+
+        span {
+            font-weight: 600;
+            font-size: 2em;
+        }
+    }
+
+    .button {
+        width: 150px;
+        border-radius: 32px
     }
 }
 

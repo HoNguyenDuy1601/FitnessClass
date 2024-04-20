@@ -90,13 +90,15 @@ const DetailPersonInfo = () => {
                                 value={value?.address}
                                 disabled
                             /> 
-                            <Input
-                                label="Vị trí"
-                                className={styles.input}
-                                handleChange={() => {}}
-                                value={value?.position}
-                                disabled
-                            /> 
+                            {dataFromMotherScreen.currentPage != "/customer-management" && 
+                                <Input
+                                    label="Vị trí"
+                                    className={styles.input}
+                                    handleChange={() => {}}
+                                    value={value?.position}
+                                    disabled
+                                />
+                            } 
                         </div>
                     </div>
                     <div className={styles.buttons}>

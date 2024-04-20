@@ -18,6 +18,7 @@ const TrainerManagement = () => {
             { header: 'Tên', accessorKey: 'firstName' },
             { header: 'Họ', accessorKey: 'lastName' },
             { header: 'Email', accessorKey: 'email' },
+            { header: 'Số điện thoại', accessorKey: 'phone' },
             { header: 'Ngày sinh', accessorKey: 'dob',
             cell: (value) => (
                 new Date(value.getValue() as Date).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"}) 

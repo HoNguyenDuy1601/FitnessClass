@@ -15,6 +15,7 @@ import { AppRouter, RouterGroup } from '@/constants/routes';
 import DetailPackage from '@/pages/Packages/Detail';
 import DetailPersonInfo from '@/pages/PersonInformation';
 import CurrentLoginUserInfo from '@/pages/CurrentLoginUser';
+import LoginUserInfo from '@/pages/LoginUserInfo';
 
 const Error = lazy(() => import('@/pages/Error'));
 const Home = lazy(() => import('@/pages/index'));
@@ -102,7 +103,7 @@ export const routes: AppRouter[] = [
     { path: '/staff', element: <StaffDetail />, hidden: true, group: RouterGroup.management },
     { path: '/persondetail', element: <DetailPersonInfo />, hidden: true, group: RouterGroup.management },
     { path: '/currentLoginUserInfo', element: <CurrentLoginUserInfo />, hidden: true, group: RouterGroup.management },
-
+    { path: '/loginuserdetail', element: <LoginUserInfo />, hidden: true, group: RouterGroup.management },
     {
         path: '/profile',
         element: <Profile />,

@@ -1,25 +1,34 @@
+import clsx from 'clsx';
 import { useAsync } from 'react-use';
 
+import Button from '@/components/Button';
 import { TrainingPrograms } from '@/components/Icons';
 import Loader from '@/components/Loading/Loader';
 import { BaseResponseDto } from '@/interfaces/Response/BaseResponseDto';
 import { executeGetWithPagination } from '@/utils/http-client';
 
-import styles from './currentLoginUser.module.scss';
+import styles from './loginuserinfo.module.scss';
+import { useNavigate } from 'react-router-dom';
 import { PersonInformation } from '@/interfaces/Response/PersonInforDto';
 import Input from '@/components/Input';
 
-const CurrentLoginUserInfo = () => {
+const LoginUserInfo = () => {
     const { loading, value } = useAsync(async () => {
         try {
             const { data }: { data: BaseResponseDto<PersonInformation> } = await executeGetWithPagination(
-                `/info`
+                `/info`,
             );
             return data.data;
         } catch (error) {
             console.error(error);
         }
     });
+    console.log(value);
+    const navigate = useNavigate();
+
+    const handleCancelClick = () => {
+        navigate("/dashboard");
+    };
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -85,16 +94,16 @@ const CurrentLoginUserInfo = () => {
                             /> 
                         </div>
                     </div>
-                    {/* <div className={styles.buttons}>
+                    <div className={styles.buttons}>
                         <div className={styles.group}>
                             <div/>
                             <Button content={<span>Trở về</span>} className={clsx(styles.button, styles.cancel)} onClick={handleCancelClick}/>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
             )}
         </div>
     );
 };
 
-export default CurrentLoginUserInfo;
+export default LoginUserInfo;

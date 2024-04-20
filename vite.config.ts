@@ -25,6 +25,11 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/login/, '/login'),
             },
+            '/info': {
+                target: 'https://e1cardiomanagementapis24.azurewebsites.net',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/info/, '/info'),
+            },
             '/api': {
                 target: 'https://e1cardiomanagementapis24.azurewebsites.net',
                 changeOrigin: true,

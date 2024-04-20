@@ -122,7 +122,6 @@ const Packages = () => {
         <div className={styles.container}>
             <div className={styles.header}>
                 <div className={styles.title}>
-                    <TrainingPrograms />
                     <span>Gói tập </span>
                 </div>
                 <SearchBox 

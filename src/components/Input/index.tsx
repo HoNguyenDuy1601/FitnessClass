@@ -8,7 +8,7 @@ interface IInputProps extends HTMLProps<HTMLInputElement> {
     label?: string;
     type?: HTMLInputTypeAttribute;
     className?: string;
-    error?: FieldError;
+    error?: FieldError | null;
     required?: boolean;
     handleChange?: (name: string, value: unknown) => void;
     fixedplaceholder?: string;
@@ -35,7 +35,7 @@ const Input = (props: IInputProps, ref: ForwardedRef<HTMLInputElement>) => {
                     {...props}
                     id={id}
                     className={clsx({
-                        [styles.required]: error?.type === 'required',
+                        [styles.error]: hasError(),
                         [styles.disabled]: props.disabled,
                     })}
                     type={type}
