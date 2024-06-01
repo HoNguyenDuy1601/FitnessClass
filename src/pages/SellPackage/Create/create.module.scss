@@ -46,14 +46,43 @@
     .input {
         margin-bottom: $margin-sm * 4;
     }
-
+    .timeSelect {
+        display: flex;
+        column-gap: 30px;
+        align-items: center;
+    }
+    .scheduleContainer{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .schedule{
+        display: flex;
+        gap: 10px;
+        color: #41B06E;
+        border: 1px solid #41B06E;
+        border-radius: 20px;
+        padding: 5px;
+        background-color: white;
+        width: 190px;
+        align-items: center;
+        justify-content: center;
+    }
     input,
     select {
         height: 50px !important;
+        cursor: pointer;
     }
 
     textarea {
         height: 168px !important;
+    }
+
+    .icon{
+        font-size: 36px;
+    }
+    .iconRemove{
+        font-size: 22px;
     }
 }
 
@@ -64,77 +93,18 @@
     margin-top: 2em;
 
     .group {
-        width: 100%;
+        width: 40%;
         display: flex;
-        justify-content: flex-end;
-
-        .button {
-            flex-basis: 25%;
-            border-radius: $radius-md * 5;
-        }
-    }
-}
-
-.schedules {
-
-    .box {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .button {
-        width: 35px;
-        min-height: 35px;
-        padding: 0;
-        display: flex;
-    }
-
-    .inputs {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        column-gap: 12px;
-    }
-
-    .label {
-        font-weight: 600;
-        opacity: .8;
-        margin-bottom: 12px;
-        display: block;
-        font-size: 18px;
-    }
-
-    .schedules-added {
-        margin-top: $margin-sm * 1.5;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        column-gap: 8px;
-        row-gap: 8px;
-    }
-
-    .schedule {
-        background: #afafaf;
-        padding: $padding-sm;
-        border-radius: $radius-sm;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
         justify-content: space-between;
 
-        .value {
-            display: flex;
-            justify-content: space-between;
-            width: 85%;
+        .button {
+            flex-basis: 45%;
+            border-radius: $radius-md * 5;
         }
 
-        .remove {
-            background: none;
-            border: none;
-            outline: none;
-            padding: 0;
-            margin: 0;
-            cursor: pointer;
+        .cancel {
+            background: white;
+            color: black;
         }
     }
 }

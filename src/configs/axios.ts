@@ -15,6 +15,8 @@ API.interceptors.response.use(
     (error) => {
         console.log(`*********** AxiosError ***********`, error);
 
+        console.log(import.meta.env);
+
         if (!error.response) {
             return Promise.reject(error);
         }

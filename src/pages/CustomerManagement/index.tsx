@@ -37,8 +37,11 @@ const CustomerManagement = () => {
 
     const cols = useMemo<ColumnDef<CustomerManagementResponseDto>[]>(
         () => [
-            { header: 'Tên', accessorKey: 'firstName' },
-            { header: 'Họ', accessorKey: 'lastName' },
+            { header: 'Họ và tên', accessorKey: 'firstName',
+                cell: (x) => (
+                    <div>{x.cell.row.original.lastName + " " + x.cell.row.original.firstName}</div>
+            ),
+            },
             { header: 'Số điện thoại', accessorKey: 'phone' },
             { header: 'Địa chỉ', accessorKey: 'address' },
             { header: 'Ngày sinh', accessorKey: 'dob',
@@ -89,7 +92,7 @@ const CustomerManagement = () => {
                 value={searchTerm}/>
             </div>
             <div className={styles.table}>
-                <TableDataList cols={cols} path={`/api/Auth/customers?query=${searchTerm}`} key={searchTerm} />
+                <TableDataList cols={cols} path={`/api/User/customers?query=${searchTerm}`} key={searchTerm} />
             </div>
         </div>
     );

@@ -15,7 +15,11 @@
         font-size: 2em;
     }
 }
-
+.avatar{
+    width: 204px;
+    height: 204px;
+    margin-bottom: 20px;
+}
 .form {
     background: #ccc;
     padding: $padding-sm * 4;

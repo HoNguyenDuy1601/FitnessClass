@@ -17,8 +17,8 @@ const variants = {
 const Dropdown: FC<DropdownProps> = ({ isShow, clickInfo, clickLogout }) => {
     return (
         <motion.div className={styles.container} animate={isShow ? 'open' : 'closed'} variants={variants}>
-            <span onClick={clickInfo}>Thông tin</span>
-            <span onClick={clickLogout}>Đăng xuất</span>
+            <span onClick={clickInfo} className='selection'>Thông tin</span>
+            <span onClick={clickLogout} className='selection'>Đăng xuất</span>
         </motion.div>
     );
 };

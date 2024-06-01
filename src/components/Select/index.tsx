@@ -13,11 +13,12 @@ interface SelectProps {
     className?: string;
     options: Option[];
     onChange?: (value: string | number) => void;
-    defaultValue?: number;
+    defaultValue: number;
+    value?: string | number
 }
 
 const Select: FC<SelectProps> = (props) => {
-    const { label, className, options, onChange, defaultValue } = props;
+    const { label, className, options, onChange, defaultValue, value } = props;
 
     const id = useId();
     return (
@@ -25,10 +26,10 @@ const Select: FC<SelectProps> = (props) => {
             <label htmlFor={id} className={styles.label}>
                 {label}
             </label>
-            <select id={id} onChange={(e) => onChange && onChange(e.target.value)} defaultValue={defaultValue}>
+            <select id={id} onChange={(e) => onChange && onChange(e.target.value)} defaultValue={defaultValue} value={value}>
                 <option selected disabled></option>
                 {options.map(({ label, value }, index) => (
-                    <option key={index} value={value}>
+                    <option key={index} value={value} >
                         {label}
                     </option>
                 ))}

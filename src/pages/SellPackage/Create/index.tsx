@@ -1,73 +1,132 @@
-import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import _ from 'lodash';
-import { FC, useState } from 'react';
-import toast from 'react-hot-toast';
+import clsx from 'clsx';
 
 import Button from '@/components/Button';
-import { TrainingPrograms } from '@/components/Icons';
 import Input from '@/components/Input';
-import Select from '@/components/Select';
-import { dayOptions, timeOptions } from '@/constants/packages';
-import useQueryParams from '@/hooks/useQueryParams';
-import {
-    CreateSellPackageRequestDto,
-    defaultCreateSellPackageRequest,
-    SellPackageCustomerRequestDto,
-    SellPackageScheduleRequestDto,
-} from '@/interfaces/Request/CreateSellPackageRequestDto';
-import { executePostWithBody } from '@/utils/http-client';
 
 import styles from './create.module.scss';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Select, { Option } from '@/components/Select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDeleteLeft, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import { CreateSellPackageRequestDto, Schedule } from '@/interfaces/Request/CreateSellPackageRequestDto';
+import { executePostWithBody } from '@/utils/http-client';
+import toast from 'react-hot-toast';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { makeStyles } from '@mui/styles';
 
+
+enum DaysOfWeek {
+    Sunday = 0,
+    Monday = 1,
+    Tuesday = 2,
+    Wednesday = 3,
+    Thursday = 4,
+    Friday = 5,
+    Saturday = 6
+}
 const CreateSellPackage = () => {
-    const id = useQueryParams('id');
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [requestDto, setRequestDto] = useState<CreateSellPackageRequestDto>({
-        ..._.cloneDeep(defaultCreateSellPackageRequest),
-        demoPackageId: Number(id),
+    const location = useLocation();
+    const [isLoading, setIsLoading] = useState<boolean>();
+    const useStyles = makeStyles(() => ({
+        timePicker: {
+          '& .MuiInputBase-root': {
+            'height': '52px',
+            'overflow': 'hidden',
+            'margin-bottom': '12px',
+            'background-color': 'white',
+            'border-radius': '10px',
+          },
+        },
+      }));
+    let id = location.state.id;
+    const [listSchedules, setListSchedules] = useState<Schedule[] >([]);
+    const [scheduleItem, setScheduleItem] = useState<Schedule>({
+        day: 0,
+        time: {
+            hour: 0,
+            minute: 0
+        }
     });
+    const daysInWeek = [
+        {number: 0, date: "Sunday"},
+        {number: 1, date: "Monday"},
+        {number: 2, date: "Tuesday"},
+        {number: 3, date: "Wednesday"},
+        {number: 4, date: "Thursday"},
+        {number: 5, date: "Friday"},
+        {number: 6, date: "Saturday"},
+    ]
 
-    const handleDateChange = (key: keyof CreateSellPackageRequestDto, value: string) => {
-        const localDateTime = new Date(value);
-        const isoDateTime = localDateTime.toISOString();
-        setRequestDto((prev) => ({ ...prev, [key]: isoDateTime }));
-    };
-
-    const handleCustomerChange = (key: keyof SellPackageCustomerRequestDto, value: string) => {
-        setRequestDto((prev) => ({ ...prev, customerInfor: { ...prev.customerInfor, [key]: value } }));
-    };
-
-    const handleAddSchedule = (schedule: SellPackageScheduleRequestDto) => {
-        setRequestDto((prev) => ({ ...prev, schedules: [...prev.schedules, schedule] }));
-    };
-
-    const handleRemoveSchedule = (schedule: SellPackageScheduleRequestDto) => {
-        setRequestDto((prev) => ({
-            ...prev,
-            schedules: [...prev.schedules.filter((value) => !_.isEqual(value, schedule))],
-        }));
-    };
+    const daysInWeekOptions: Option[] = daysInWeek ? daysInWeek.map((branch) => ({ label: branch.date, value: branch.number })) : [];
+    
+    const [requestDto, setRequestDto] = useState<CreateSellPackageRequestDto>({
+        demoPackageId: id,
+        consultee:{
+            email: "",
+            firstName: "",
+            lastName: "", 
+            phone: ""
+        },
+        endDate: new Date(),
+        startDate: new Date(),
+        schedules: listSchedules
+    });
 
     const handleCreateClick = async () => {
         try {
             setIsLoading(true);
-            await executePostWithBody('/api/SelledPackage', requestDto);
-            toast.success('Create sell package successfully');
+            await executePostWithBody('/api/PackageConsultant', requestDto);
+            toast.success('Tạo đơn hàng thành công');
         } catch (error) {
-            toast.error('Create sell package error!!!');
-            console.error(error);
+            toast.error('Không thể tạo đơn hàng!');
         } finally {
             setIsLoading(false);
+            // navigate('/packages');
         }
     };
+    const navigate = useNavigate();
 
+
+    const handleCancelClick = () => {
+        navigate('/packages');
+    };
+    const handleAddSchedule = () => {
+        const isObjectInList = listSchedules.some(item => item.day === scheduleItem.day && item.time === scheduleItem.time);
+        if(isObjectInList == false){
+            setListSchedules([...listSchedules, scheduleItem]);
+        }
+        let a = requestDto;
+        requestDto.schedules = [...listSchedules, scheduleItem];
+        setRequestDto(a);
+    }
+    const handleRemoveSchedule = (day: number, time: {
+        hour: number,
+        minute: number
+    }) => {
+        console.log({day, time});
+        let i = 0;
+        listSchedules.forEach(element => {
+            if(element.day === day && element.time === time){
+                let listSchedule : Schedule[] = listSchedules;
+                listSchedule.splice(i, 1);
+                setListSchedules([...listSchedule])
+                let a = requestDto;
+                requestDto.schedules = [...listSchedule];
+                setRequestDto(a);
+            }
+            i++;
+        });
+    }
+    const classes = useStyles();
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <TrainingPrograms />
-                <span>Selled Package</span>
+                <span>Đơn hàng</span>
             </div>
             <div className={styles.form}>
                 <div className={styles.inputs}>
@@ -79,104 +138,93 @@ const CreateSellPackage = () => {
                             defaultValue={id || ''}
                             disabled
                         />
-                        <Input
-                            label="Start Date"
-                            className={styles.input}
-                            handleChange={(_, value) => handleDateChange('startDate', String(value))}
-                            type="datetime-local"
-                        />
-                        <Input
-                            label="End Date"
-                            className={styles.input}
-                            handleChange={(_, value) => handleDateChange('endDate', String(value))}
-                            type="datetime-local"
-                        />
-                        <ScheduleInputs
-                            schedules={requestDto.schedules}
-                            handleAddClick={handleAddSchedule}
-                            handleRemoveSchedule={handleRemoveSchedule}
-                        />
+                        <Input label="Ngày bắt đầu" className={styles.input} 
+                            handleChange={(_, x)  => {
+                                let a = requestDto;
+                                requestDto.startDate = new Date(String(x));
+                                setRequestDto(a);
+                            }} 
+                            type="date"/>
+                        <Input label="Ngày kết thúc" className={styles.input} 
+                            handleChange={(_, x) => {
+                                let a = requestDto;
+                                requestDto.endDate = new Date(String(x));
+                                setRequestDto(a);
+                            }} type="date"/>
+                        <div className={styles.timeSelect}>
+                        <Select
+                                    className={styles.input}
+                                    label="Thời gian tập"
+                                    options={daysInWeekOptions}
+                                    onChange={(value) => {
+                                        setScheduleItem({day : +value, time : scheduleItem.time})
+                                    }}
+                                    defaultValue= {scheduleItem.day}
+                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                <DemoContainer components={['TimePicker']}>
+                                    <TimePicker 
+                                        className={classes.timePicker}
+                                        onChange={(value) => {
+                                        setScheduleItem({day : scheduleItem.day, time : {
+                                            hour: value.$H as number,
+                                            minute: value.$m as number
+                                        }})
+                                        }}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                            <FontAwesomeIcon icon={faSquarePlus}  className={styles.icon} onClick={handleAddSchedule}/>
+                        </div>
+                        <div className={styles.scheduleContainer}>
+                            {listSchedules.map((schedule, index) => (
+                                <div key={index} className={styles.schedule}>
+                                        {DaysOfWeek[schedule.day]} - {schedule.time.hour < 10 ? "0"+ schedule.time.hour: schedule.time.hour}:{schedule.time.minute < 10 ? "0"+ schedule.time.minute: schedule.time.minute}
+                                        <FontAwesomeIcon icon={faDeleteLeft}  className={styles.iconRemove} onClick={() => handleRemoveSchedule(schedule.day, schedule.time)}/>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                     <div className={styles['group-2']}>
-                        <Input
-                            label="First name"
-                            className={styles.input}
-                            handleChange={(_, value) => handleCustomerChange('firstName', String(value))}
-                        />
-                        <Input
-                            label="Last name"
-                            className={styles.input}
-                            handleChange={(_, value) => handleCustomerChange('lastName', String(value))}
-                        />
-                        <Input
-                            label="Email"
-                            className={styles.input}
-                            handleChange={(_, value) => handleCustomerChange('email', String(value))}
-                        />
-                        <Input
-                            label="Phone"
-                            className={styles.input}
-                            handleChange={(_, value) => handleCustomerChange('phone', String(value))}
-                        />
+                        <Input label="First name" className={styles.input} 
+                            handleChange={(_, x) => {
+                                let a = requestDto;
+                                requestDto.consultee.firstName = String(x);
+                                setRequestDto(a);
+                            }} />
+                        <Input label="Last name" className={styles.input} 
+                            handleChange={(_, x) => {
+                                let a = requestDto;
+                                requestDto.consultee.lastName = String(x);
+                                setRequestDto(a);
+                            }} />
+                        <Input label="Email" className={styles.input} 
+                            handleChange={(_, x) => {
+                                let a = requestDto;
+                                requestDto.consultee.email = String(x);
+                                setRequestDto(a);
+                            }} />
+                        <Input label="Phone" type='number' className={styles.input} 
+                            handleChange={(_, x) => {
+                                let a = requestDto;
+                                requestDto.consultee.phone = String(x);
+                                setRequestDto(a);
+                            }} 
+                            />
                     </div>
                 </div>
                 <div className={styles.buttons}>
                     <div className={styles.group}>
+                        <div />
+                        <Button content={<span>Trở về</span>} className={clsx(styles.button, styles.cancel)} onClick={handleCancelClick}/>
                         <Button
-                            content={<span>Tạo</span>}
-                            className={styles.button}
-                            onClick={handleCreateClick}
-                            loading={isLoading}
-                        />
+                                content={<span>Tạo đơn hàng</span>}
+                                className={styles.button}
+                                onClick={handleCreateClick}
+                                loading={isLoading}
+                            />
                     </div>
                 </div>
-            </div>
-        </div>
-    );
-};
-
-interface ScheduleInputsProps {
-    schedules: SellPackageScheduleRequestDto[];
-    handleAddClick: (schedule: SellPackageScheduleRequestDto) => void;
-    handleRemoveSchedule: (schedule: SellPackageScheduleRequestDto) => void;
-}
-
-const ScheduleInputs: FC<ScheduleInputsProps> = ({ schedules, handleAddClick, handleRemoveSchedule }) => {
-    const [schedule, setSchedule] = useState<SellPackageScheduleRequestDto>({ day: 0, time: 0 });
-
-    const handleInputChange = (key: keyof SellPackageScheduleRequestDto, value: number) => {
-        setSchedule((prev) => ({ ...prev, [key]: value }));
-    };
-
-    return (
-        <div className={styles.schedules}>
-            <label htmlFor="id" className={styles.label}>
-                Schedules
-            </label>
-            <div className={styles.box}>
-                <Button
-                    content={<FontAwesomeIcon icon={faPlus} />}
-                    className={styles.button}
-                    onClick={() => handleAddClick(schedule)}
-                />
-                <div className={styles.inputs}>
-                    <Select options={timeOptions} onChange={(value) => handleInputChange('time', Number(value))} />
-                    <Select options={dayOptions} onChange={(value) => handleInputChange('day', Number(value))} />
-                </div>
-            </div>
-            <div className={styles['schedules-added']}>
-                {schedules.map(({ time, day }, index) => (
-                    <div key={index} className={styles.schedule}>
-                        <div className={styles.value}>
-                            <span>Time: {time}</span>
-                            <span>|</span>
-                            <span>Day: {day}</span>
-                        </div>
-                        <button className={styles.remove} onClick={() => handleRemoveSchedule({ time, day })}>
-                            <FontAwesomeIcon icon={faXmark} />
-                        </button>
-                    </div>
-                ))}
             </div>
         </div>
     );

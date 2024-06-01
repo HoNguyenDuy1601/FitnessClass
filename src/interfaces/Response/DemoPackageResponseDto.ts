@@ -1,5 +1,6 @@
 export interface DemoPackageResponseDto {
     id: number;
+    imageUrl: string;
     packageName: string;
     descriptions: string;
     numberOfDays: number;

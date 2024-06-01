@@ -1,30 +1,43 @@
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC } from 'react';
 
 import styles from './table-action.module.scss';
 
 interface TableActionProps {
-    onEditClick: () => void;
-    onDeleteClick: () => void;
     onViewClick?: () => void;
+    onEditClick?: () => void;
+    onDeleteClick?: () => void;
+    onCreateSellPackage?: () => void;
 }
 
-const TableAction: FC<TableActionProps> = ({ onEditClick, onDeleteClick, onViewClick }) => {
+const TableActionPackage: FC<TableActionProps> = ({ onEditClick, onDeleteClick, onCreateSellPackage, onViewClick }) => {
     return (
         <div className={styles.container}>
-            <FontAwesomeIcon icon={faPenToSquare} className={styles.edit} onClick={onEditClick} />
-            <span>|</span>
-            <FontAwesomeIcon icon={faTrashCan} className={styles.delete} onClick={onDeleteClick} />
             {onViewClick && (
                 <>
+                    <FontAwesomeIcon icon={faEye} className={styles.edit} onClick={onViewClick} />
                     <span>|</span>
-                    <FontAwesomeIcon icon={faSquarePlus} className={styles.view} onClick={onViewClick} />
                 </>
             )}
+            {onEditClick && (
+                <>
+                    <FontAwesomeIcon icon={faPenToSquare} className={styles.edit} onClick={onEditClick} />
+                    <span>|</span>
+                </>
+            )
+            }
+            <FontAwesomeIcon icon={faTrashCan} className={styles.delete} onClick={onDeleteClick} />
+            {onCreateSellPackage && (
+                <>
+                    <span>|</span>
+                    <FontAwesomeIcon icon={faSquarePlus} className={styles.view} onClick={onCreateSellPackage} />
+                </>
+            )}
+
         </div>
     );
 };
 
-export default TableAction;
+export default TableActionPackage;

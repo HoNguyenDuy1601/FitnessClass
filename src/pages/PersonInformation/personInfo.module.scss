@@ -15,7 +15,11 @@
         font-size: 2em;
     }
 }
-
+.flexbox {
+    display: flex;
+    column-gap: 30px;
+    align-items: center;
+}
 .form {
     background: #ccc;
     padding: $padding-sm * 4;
@@ -26,9 +30,10 @@
 .inputs {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
 
     .group-1 {
-        flex-basis: 45%;
+        flex-basis: 30%;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -36,17 +41,36 @@
     }
 
     .group-2 {
-        flex-basis: 45%;
+        flex-basis: 40%;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
+    .group-3 {
+        flex-basis: 20%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
 
     .input {
         margin-bottom: $margin-sm * 4;
     }
-
+    .avatar{
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+    .username { 
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 35px;
+    }
     input,
     select {
         height: 50px !important;

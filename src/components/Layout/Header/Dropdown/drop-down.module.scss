@@ -14,6 +14,8 @@
     span {
         &:last-child {
             margin-top: $margin-sm * 2;
+            
         }
+        cursor: pointer;
     }
 }

@@ -20,7 +20,7 @@ const DetailPersonInfo = () => {
     const { loading, value } = useAsync(async () => {
         try {
             const { data }: { data: BaseResponseDto<PersonInformation> } = await executeGetWithPagination(
-                `/api/Auth/${dataFromMotherScreen.personId}`,
+                `/api/User/${dataFromMotherScreen.personId}`,
                 { pageIndex: 1, pageSize: 1 },
             );
             return data.data;
@@ -45,37 +45,23 @@ const DetailPersonInfo = () => {
             ) : (
                 <div className={styles.form}>
                     <div className={styles.inputs}>
-                        <div className={styles['group-1']}>
-                            <Input
-                                label="Tên"
-                                className={styles.input}
-                                handleChange={() => {}}
-                                value={value?.firstName}
-                                disabled
-                            /> 
-                            <Input
-                                label="Họ"
-                                className={styles.input}
-                                handleChange={() => {}}
-                                value={value?.lastName}
-                                disabled
-                            /> 
+                        <div className={styles['group-3']}>
+                            <img 
+                                src={`/src/assets/img/${dataFromMotherScreen.personId}.jpeg`}
+                                className={styles.avatar}
+                            />
+                            <div className={styles.username}>{value?.lastName} {value?.firstName}</div>
+                            {dataFromMotherScreen.currentPage == "/customer-management" && 
                             <Input
                                 label="Số điện thoại"
                                 className={styles.input}
                                 handleChange={() => {}}
                                 value={value?.phone}
                                 disabled
-                            /> 
-                            <Input
-                                label="Ngày sinh"
-                                className={styles.input}
-                                handleChange={() => {}}
-                                value={new Date(value?.dob as Date).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"})}
-                                disabled
-                            /> 
+                            />
+                            }
                         </div>
-                        <div className={styles['group-2']}>
+                        <div className={styles['group-1']}>
                             <Input
                                 label="Email"
                                 className={styles.input}
@@ -90,7 +76,7 @@ const DetailPersonInfo = () => {
                                 value={value?.address}
                                 disabled
                             /> 
-                            {dataFromMotherScreen.currentPage != "/customer-management" && 
+                            {dataFromMotherScreen.currentPage == "/staff-management" && 
                                 <Input
                                     label="Vị trí"
                                     className={styles.input}
@@ -99,6 +85,84 @@ const DetailPersonInfo = () => {
                                     disabled
                                 />
                             } 
+                            {dataFromMotherScreen.currentPage == "/trainer-management" && 
+                                <Input
+                                    label="Chứng chỉ"
+                                    className={styles.input}
+                                    handleChange={() => {}}
+                                    value={value?.certifications}
+                                    disabled
+                                />
+                            } 
+                            {dataFromMotherScreen.currentPage == "/customer-management" && 
+                                <Input
+                                label="Ngày sinh"
+                                className={styles.input}
+                                handleChange={() => {}}
+                                value={new Date(value?.dob as Date).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"})}
+                                disabled
+                            /> 
+                            } 
+                        </div>
+                        <div className={styles['group-2']}>
+                        {dataFromMotherScreen.currentPage == "/customer-management" && <div>
+                                <div className={styles.flexbox}>
+                                    <Input
+                                        label="Cân nặng"
+                                        className={styles.input}
+                                        handleChange={() => {}}
+                                        value={value?.weight + " kg"}
+                                        disabled
+                                    /> 
+                                    <Input
+                                        label="Chiều cao"
+                                        className={styles.input}
+                                        handleChange={() => {}}
+                                        value={value?.height + " cm"}
+                                        disabled
+                                    /> 
+                                </div>
+                                <div className={styles.flexbox}>
+                                    <Input
+                                        label="Tỷ lệ cơ bắp"
+                                        className={styles.input}
+                                        handleChange={() => {}}
+                                        value={value?.muscleRatio}
+                                        disabled
+                                    /> 
+                                    <Input
+                                        label="Tỷ lệ chất béo"
+                                        className={styles.input}
+                                        handleChange={() => {}}
+                                        value={value?.fatRatio}
+                                        disabled
+                                    /> 
+                                </div>
+                                <Input
+                                        label="Cấp độ mỡ nội tạng"
+                                        className={styles.input}
+                                        handleChange={() => {}}
+                                        value={value?.visceralFatLevels}
+                                        disabled
+                                    /> 
+                            </div>}
+                        {dataFromMotherScreen.currentPage != "/customer-management" && <div>
+                                <Input
+                                        label="Số điện thoại"
+                                        className={styles.input}
+                                        handleChange={() => {}}
+                                        value={value?.phone}
+                                        disabled
+                                /> 
+                                <Input
+                                    label="Ngày sinh"
+                                    className={styles.input}
+                                    handleChange={() => {}}
+                                    value={new Date(value?.dob as Date).toLocaleDateString('en-us', { year:"numeric", month:"short", day:"numeric"})}
+                                    disabled
+                                />            
+                                </div>
+                        }
                         </div>
                     </div>
                     <div className={styles.buttons}>

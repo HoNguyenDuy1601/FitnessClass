@@ -21,17 +21,17 @@ export default defineConfig({
     server: {
         proxy: {
             '/login': {
-                target: 'https://e1cardiomanagementapis24.azurewebsites.net',
+                target: 'https://management-apis.azurewebsites.net',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/login/, '/login'),
             },
             '/info': {
-                target: 'https://e1cardiomanagementapis24.azurewebsites.net',
+                target: 'https://management-apis.azurewebsites.net/api/Auth',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/info/, '/info'),
             },
             '/api': {
-                target: 'https://e1cardiomanagementapis24.azurewebsites.net',
+                target: 'https://management-apis.azurewebsites.net',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, '/api'),
             },

@@ -3,8 +3,8 @@
     width: 280px;
     height: 100vh;
     overflow: hidden;
-    background: white;
-
+    background: black;
+    color: yellow;
     .groups {
         margin-top: $margin* 8;
     }
@@ -16,7 +16,7 @@
     position: relative;
     display: block;
     text-decoration: none;
-    color: black;
+    color: yellow;
 
     &::before {
         content: '';

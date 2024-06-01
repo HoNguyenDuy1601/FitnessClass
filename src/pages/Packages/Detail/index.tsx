@@ -14,14 +14,15 @@ import { BaseResponseDto } from '@/interfaces/Response/BaseResponseDto';
 import { BranchResponseDto } from '@/interfaces/Response/BranchResponseDto';
 import { executeGetWithPagination, executePutWithBody } from '@/utils/http-client';
 
-import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './detail.module.scss';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const DetailPackage = () => {
     const location = useLocation();
     let data = location.state;
     const [requestDto, setRequestDto] = useState<UpdatePackageRequestDto>(
         {
+            imageUrl: data.url,
             branchId: data.branchId,
             descriptions: data.descriptions,
             numberOfDays: data.numberOfDays,
@@ -64,7 +65,6 @@ const DetailPackage = () => {
             navigate('/packages');
         }
     };
-
     const navigate = useNavigate();
 
     const handleCancelClick = () => {
@@ -82,18 +82,12 @@ const DetailPackage = () => {
                 <div className={styles.form}>
                     <div className={styles.inputs}>
                         <div className={styles['group-1']}>
+                            {requestDto.imageUrl && <img src={requestDto.imageUrl} className={styles.avatar}></img>}
                             <Input
                                 label="Gói tập"
                                 className={styles.input}
                                 handleChange={(_, value) => handleInputChange('packageName', String(value))}
                                 value={requestDto.packageName}
-                            />
-                            <Select
-                                className={styles.input}
-                                label="Cơ sở"
-                                options={options}
-                                onChange={(value) => handleInputChange('branchId', Number(value))}
-                                defaultValue={requestDto.branchId}
                             />
                             <Textarea
                                 label="Mô tả"
@@ -132,6 +126,13 @@ const DetailPackage = () => {
                                 className={styles.input}
                                 handleChange={(_, value) => handleInputChange('type', String(value))}
                                 value={requestDto.type}
+                            />
+                            <Select
+                                className={styles.input}
+                                label="Cơ sở"
+                                options={options}
+                                onChange={(value) => handleInputChange('branchId', Number(value))}
+                                defaultValue={requestDto.branchId}
                             />
                         </div>
                     </div>

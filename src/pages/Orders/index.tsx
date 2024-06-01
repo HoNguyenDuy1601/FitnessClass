@@ -2,8 +2,6 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Button from '@/components/Button';
-import { Orders, TrainingPrograms } from '@/components/Icons';
 import PackageType from '@/components/PackageType';
 import TableDataList from '@/components/TableDataList';
 import { EPackageType } from '@/constants/packages';
@@ -14,7 +12,7 @@ import { executeDeleteWithBody } from '@/utils/http-client';
 import toast from 'react-hot-toast';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { SelledPackageResponseDto } from '@/interfaces/Response/SelledPackageResponseDto';
-import TableActionForView from '@/components/TableActionForView';
+import TableAction from '@/components/TableAction';
 import { confirmAlert } from 'react-confirm-alert';
 
 const Order = () => {
@@ -53,48 +51,51 @@ const Order = () => {
 
     const cols = useMemo<ColumnDef<SelledPackageResponseDto>[]>(
         () => [
-            { header: 'Gói tập', accessorKey: 'demoPackages.packageName' },
+            { header: 'Gói tập', accessorKey: 'demoPackage.packageName' },
             { header: 'Khách hàng', accessorKey: 'customer.firstName',
               cell: (x) => (
-                <div>{x.cell.row.original.customer.lastName + " " + x.cell.row.original.customer.firstName}</div>
+                <div>{x.cell.row.original.consultees.lastName + " " + x.cell.row.original.consultees.firstName}</div>
             ),
             },
-            { header: 'Nhân viên quản lý', accessorKey: 'staff.firstName',
+            { header: 'Nhân viên tư vấn', accessorKey: 'staff.firstName',
             cell: (x) => (
-                <div>{x.cell.row.original.staff.lastName + " " + x.cell.row.original.staff.firstName}</div>
+                <div>{x.cell.row.original.consultants.lastName + " " + x.cell.row.original.consultants.firstName}</div>
             ),
             },
-            { header: 'Số ngày tập', accessorKey: 'demoPackages.numberOfDays' },
-            { header: 'Số buổi tập', accessorKey: 'demoPackages.numberOfSessions' },
+            { header: 'Số ngày tập', accessorKey: 'demoPackage.numberOfDays' },
+            { header: 'Số buổi tập', accessorKey: 'demoPackage.numberOfSessions' },
             {
                 header: 'Loại',
-                accessorKey: 'demoPackages.type',
+                accessorKey: 'demoPackage.type',
                 cell: (value) => (
                     <PackageType text={value.getValue() as string} type={value.getValue() as EPackageType} />
                 ),
             },
-            { header: 'Cơ sở', accessorKey: 'demoPackages.branch.branchName' },
+            { header: 'Cơ sở', accessorKey: 'demoPackage.branch.branchName' },
             {
                 header: 'Thao tác',
                 cell: (x) => (
-                    <TableActionForView
+                    <TableAction
                         onViewClick={()=>
-                                {
-                                // navigate('/package-detail', {
-                                //     state: { 
-                                //         "id": x.cell.row.original.id,
-                                //         "packageName": x.cell.row.original.packageName,
-                                //         "descriptions": x.cell.row.original.descriptions,
-                                //         "numberOfDays": x.cell.row.original.numberOfDays,
-                                //         "numberOfSessions": x.cell.row.original.numberOfSessions,
-                                //         "packagePrice": x.cell.row.original.packagePrice,
-                                //         "type": x.cell.row.original.type,
-                                //         "branchId": x.cell.row.original.branch.id,
-                                //         }
-                                //       } 
-                                //   );
+                        {
+                        navigate('/sell-package/view', {
+                            state: { 
+                                "id": x.cell.row.original.id,
                                 }
+                              } 
+                          );
                         }
+                        }
+                        onEditClick={() => {
+                            navigate('/sell-package/edit', {
+                                state: { 
+                                    "id": x.cell.row.original.id,
+                                    "demoPackageId": x.cell.row.original.demoPackage.id,
+                                    "schedules": x.cell.row.original.schedules
+                                    }
+                                  } 
+                              );
+                        }}
                         onDeleteClick={() => handleDeleteClick(x.cell.row.original.id)}
                     />
                 ),  
@@ -125,7 +126,7 @@ const Order = () => {
                 value={searchTerm}/>
             </div>
             <div className={styles.table}>
-                <TableDataList cols={cols} path={`/api/SelledPackage?query=${searchTerm}`} key={searchTerm} isRefresh={refreshTable}/>
+                <TableDataList cols={cols} path={`/api/PackageConsultant?query=${searchTerm}`} key={searchTerm} isRefresh={refreshTable}/>
             </div>
         </div>
     );

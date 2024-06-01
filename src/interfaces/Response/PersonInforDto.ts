@@ -8,4 +8,10 @@ export interface PersonInformation {
     dob: Date,
     address: string,
     position: string
+    height: number,
+    weight: number,
+    muscleRatio: number,
+    fatRatio: number,
+    visceralFatLevels: number,
+    certifications: string
 }

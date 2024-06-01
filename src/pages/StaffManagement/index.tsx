@@ -16,8 +16,11 @@ const StaffManagement = () => {
     const cols = useMemo<ColumnDef<UserManagementResponseDto>[]>(
         () => [
             { header: 'Số điện thoại', accessorKey: 'phone' },
-            { header: 'Tên', accessorKey: 'firstName' },
-            { header: 'Họ', accessorKey: 'lastName' },
+            { header: 'Họ và tên', accessorKey: 'firstName',
+                cell: (x) => (
+                    <div>{x.cell.row.original.lastName + " " + x.cell.row.original.firstName}</div>
+            ),
+            },
             { header: 'Email', accessorKey: 'email' },
             { header: 'Ngày sinh', accessorKey: 'dob',
             cell: (value) => (
@@ -65,7 +68,7 @@ const StaffManagement = () => {
                 value={searchTerm}/>
             </div>
             <div className={styles.table}>
-                <TableDataList cols={cols} path={`/api/Auth/staffs?query=${searchTerm}`} key={searchTerm}/>
+                <TableDataList cols={cols} path={`/api/User/staffs?query=${searchTerm}`} key={searchTerm}/>
             </div>
         </div>
     );

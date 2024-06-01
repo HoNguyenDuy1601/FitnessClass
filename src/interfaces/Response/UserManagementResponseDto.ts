@@ -10,9 +10,19 @@ export interface UserManagementResponseDto {
     dob: string;
     status: UserAccountStatus;
 }
-
+export interface StaffManagementResponseDto {
+    id: number,
+    phone: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    dob: Date,
+    address: string,
+    position: string
+}
 export interface CustomerManagementResponseDto {
     id: number;
+    phone: string;
     firstName: string;
     lastName: string;
     email: string;

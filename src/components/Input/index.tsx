@@ -39,8 +39,8 @@ const Input = (props: IInputProps, ref: ForwardedRef<HTMLInputElement>) => {
                         [styles.disabled]: props.disabled,
                     })}
                     type={type}
-                    onChange={(e) =>
-                        handleChange && (name ? handleChange(name, e.target.value) : handleChange('', e.target.value))
+                    onChange={(e) =>{
+                        handleChange && (name ? handleChange(name, e.target.value) : handleChange('', e.target.value))}
                     }
                 />
                 {fixedplaceholder && <span className={styles['fixed-placeholder']}>{fixedplaceholder}</span>}

@@ -19,6 +19,7 @@ export const defaultRequest: CreatePackageRequestDto = {
 };
 
 export interface UpdatePackageRequestDto {
+    imageUrl: string,
     packageName: string;
     descriptions: string;
     numberOfDays: number;
